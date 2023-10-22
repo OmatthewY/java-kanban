@@ -1,3 +1,8 @@
+package tasks.models;
+
+import tasks.enums.TaskStatus;
+import tasks.enums.TaskType;
+
 public class Subtask extends Task {
     private int epicId;
 

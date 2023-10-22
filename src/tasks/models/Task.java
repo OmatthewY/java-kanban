@@ -1,3 +1,8 @@
+package tasks.models;
+
+import tasks.enums.TaskStatus;
+import tasks.enums.TaskType;
+
 public class Task {
     private int id;
     private String name;
@@ -19,7 +24,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task ID: " + id + ", Name: " + name + ", Description: " + description + ", Type: " + type
+        return "ID: " + id + ", Name: " + name + ", Description: " + description + ", Type: " + type
                 + ", Status: " + status;
     }
 
