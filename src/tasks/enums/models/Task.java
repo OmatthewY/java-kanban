@@ -13,20 +13,22 @@ public class Task {
         this.status = status;
     }
 
+    public Task(String name, String description, TaskType type, TaskStatus status) {
+        this(0, name, description, type, status);
+    }
+
+    @Override
+    public String toString() {
+        return "Task ID: " + id + ", Name: " + name + ", Description: " + description + ", Type: " + type
+                + ", Status: " + status;
+    }
+
     public int getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public void setDescription(String description) {
@@ -35,10 +37,6 @@ public class Task {
 
     public TaskType getType() {
         return type;
-    }
-
-    public TaskStatus getStatus() {
-        return status;
     }
 
     public void setStatus(TaskStatus status) {
