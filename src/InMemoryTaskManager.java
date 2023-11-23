@@ -116,11 +116,10 @@ public class InMemoryTaskManager implements TaskManager {
             List<Integer> subtaskIds = ((Epic) epic).getSubtaskIds();
 
             for (int subtaskId : subtaskIds) {
-                Task subtask = subtasksMap.get(subtaskId);
-                if (subtask != null) {
-                    subtasksMap.remove(subtaskId);
-                }
+                deleteSubtask(subtaskId);
             }
+
+            historyManager.remove(id);
         } else {
             System.out.println("Эпик с указанным ID не найден.");
         }
@@ -132,6 +131,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         if (subtask != null) {
             subtasksMap.remove(id);
+            historyManager.remove(id);
         } else {
             System.out.println("Подзадача с указанным ID не найдена.");
         }
@@ -143,6 +143,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         if (normalTask != null) {
             normalTasksMap.remove(id);
+            historyManager.remove(id);
         } else {
             System.out.println("Задача с указанным ID не найдена.");
         }
