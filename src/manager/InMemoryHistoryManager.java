@@ -1,3 +1,5 @@
+package manager;
+
 import tasks.models.Task;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void add(Task task) {
         if (taskNodeMap.containsKey(task.getId())) {
             Node node = taskNodeMap.get(task.getId());
+
             historyList.removeNode(node);
         }
 
@@ -22,6 +25,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         if (historyList.getTasks().size() > 10) {
             Node removedNode = historyList.head;
+
             historyList.removeNode(removedNode);
             taskNodeMap.remove(removedNode.task.getId());
         }
@@ -31,6 +35,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void remove(int id) {
         if (taskNodeMap.containsKey(id)) {
             Node nodeToRemove = taskNodeMap.get(id);
+
             historyList.removeNode(nodeToRemove);
             taskNodeMap.remove(id);
         }
@@ -42,12 +47,23 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 }
 
+class Node {
+    Task task;
+    Node next;
+    Node prev;
+
+    public Node(Task task) {
+        this.task = task;
+    }
+}
+
 class CustomLinkedList {
     protected Node head;
     protected Node tail;
 
     void linkLast(Task task) {
         Node newNode = new Node(task);
+
         if (tail == null) {
             head = tail = newNode;
         } else {
@@ -59,6 +75,7 @@ class CustomLinkedList {
 
     List<Task> getTasks() {
         List<Task> tasks = new ArrayList<>();
+
         Node current = head;
         while (current != null) {
             tasks.add(current.task);

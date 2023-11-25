@@ -47,4 +47,20 @@ public class Task {
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
+    }
 }

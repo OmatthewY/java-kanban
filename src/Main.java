@@ -1,6 +1,10 @@
+import manager.InMemoryTaskManager;
+import manager.TaskManager;
 import tasks.enums.TaskStatus;
 import tasks.enums.TaskType;
+import tasks.models.Epic;
 import tasks.models.Task;
+import tasks.models.Subtask;
 
 import java.util.List;
 import java.util.Scanner;
@@ -28,21 +32,26 @@ public class Main {
                 scanner.nextLine();
 
                 if (taskTypeCommand == 1) {
-                    Task epic = taskManager.createEpic(name, description);
-                    System.out.println("Создан новый Epic с ID: " + epic.getId());
+                    Epic epic = new Epic(name, description, TaskStatus.NEW);
+                    Task createdTask = taskManager.createEpic(epic);
+
+                    System.out.println("Создан новый Epic с ID: " + createdTask.getId());
                 } else if (taskTypeCommand == 2) {
                     System.out.print("Введите ID эпика, к которому относится подзадача: ");
                     int epicId = scanner.nextInt();
                     scanner.nextLine();
 
-                    Task subtask = taskManager.createSubtask(name, description, epicId);
+                    Subtask subtask = new Subtask(0, name, description, epicId);
+                    Task createdTask = taskManager.createSubtask(subtask);
 
-                    if (subtask != null) {
-                        System.out.println("Создана новая подзадача с ID: " + subtask.getId());
+                    if (createdTask != null) {
+                        System.out.println("Создана новая подзадача с ID: " + createdTask.getId());
                     }
                 } else if (taskTypeCommand == 3) {
-                    Task normalTask = taskManager.createNormalTask(name, description);
-                    System.out.println("Создана новая Normal задача с ID: " + normalTask.getId());
+                    Task normalTask = new Task(name, description, TaskType.NORMAL, TaskStatus.NEW);
+                    Task createdTask = taskManager.createNormalTask(normalTask);
+
+                    System.out.println("Создана новая Normal задача с ID: " + createdTask.getId());
                 } else {
                     System.out.println("Такого типа не существует. Выберите 1, 2 или 3.");
                 }
@@ -51,7 +60,13 @@ public class Main {
                 int taskId = scanner.nextInt();
                 scanner.nextLine();
 
-                Task taskToUpdate = taskManager.findTaskById(taskId);
+                Task taskToUpdate = taskManager.findSubtaskById(taskId);
+                if (taskToUpdate == null) {
+                    taskToUpdate = taskManager.findEpicById(taskId);
+                }
+                if (taskToUpdate == null) {
+                    taskToUpdate = taskManager.findNormalTaskById(taskId);
+                }
 
                 if (taskToUpdate != null) {
                     System.out.print("Введите новое название задачи: ");
@@ -74,11 +89,21 @@ public class Main {
                     }
 
                     if (taskToUpdate.getType() == TaskType.EPIC) {
-                        taskManager.updateEpic(taskId, updatedName, updatedDescription, updatedStatus);
+                        Epic updatedEpic = new Epic(taskToUpdate.getId(), updatedName,
+                                updatedDescription, updatedStatus);
+
+                        taskManager.updateEpic(updatedEpic);
                     } else if (taskToUpdate.getType() == TaskType.SUBTASK) {
-                        taskManager.updateSubtask(taskId, updatedName, updatedDescription, updatedStatus);
+                        Subtask updatedSubtask = new Subtask(taskToUpdate.getId(), updatedName,
+                                updatedDescription, ((Subtask) taskToUpdate).getEpicId());
+
+                        updatedSubtask.setStatus(updatedStatus);
+                        taskManager.updateSubtask(updatedSubtask);
                     } else if (taskToUpdate.getType() == TaskType.NORMAL) {
-                        taskManager.updateNormalTask(taskId, updatedName, updatedDescription, updatedStatus);
+                        Task updatedNormalTask = new Task(taskToUpdate.getId(), updatedName,
+                                updatedDescription, TaskType.NORMAL, updatedStatus);
+
+                        taskManager.updateNormalTask(updatedNormalTask);
                     }
                     System.out.println("Задача успешно обновлена.");
                 } else {
@@ -89,7 +114,13 @@ public class Main {
                 int taskIdToDelete = scanner.nextInt();
                 scanner.nextLine();
 
-                Task taskToDelete = taskManager.findTaskById(taskIdToDelete);
+                Task taskToDelete = taskManager.findSubtaskById(taskIdToDelete);
+                if (taskToDelete == null) {
+                    taskToDelete = taskManager.findEpicById(taskIdToDelete);
+                }
+                if (taskToDelete == null) {
+                    taskToDelete = taskManager.findNormalTaskById(taskIdToDelete);
+                }
 
                 if (taskToDelete != null) {
                     if (taskToDelete.getType() == TaskType.EPIC) {
@@ -133,6 +164,7 @@ public class Main {
                     System.out.println("Подзадачи для выбранного эпика отсутствуют.");
                 } else {
                     System.out.println("Список подзадач для выбранного эпика:");
+
                     for (Task subtask : subtasksForEpic) {
                         System.out.println(subtask);
                     }
