@@ -32,13 +32,13 @@ public interface TaskManager {
 
     Task findNormalTaskById(int id);
 
-    List<Task> getAllEpics();
+    List<Epic> getAllEpics();
 
-    List<Task> getAllSubtasks();
+    List<Subtask> getAllSubtasks();
 
     List<Task> getAllNormalTasks();
 
-    List<Task> getSubtasksForEpic(int epicId);
+    List<Subtask> getSubtasksForEpic(int epicId);
 
     List<Task> getHistory();
 }

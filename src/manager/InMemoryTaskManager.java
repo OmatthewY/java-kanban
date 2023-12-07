@@ -12,13 +12,13 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private int nextId = 1;
-    private final Map<Integer, Task> epicsMap = new HashMap<>();
-    private final Map<Integer, Task> subtasksMap = new HashMap<>();
+    private final Map<Integer, Epic> epicsMap = new HashMap<>();
+    private final Map<Integer, Subtask> subtasksMap = new HashMap<>();
     private final Map<Integer, Task> normalTasksMap = new HashMap<>();
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    protected final HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
-    public Task createEpic(Epic epic) {
+    public Epic createEpic(Epic epic) {
         final int taskId = nextId++;
         epic.setId(taskId);
 
@@ -29,7 +29,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task createSubtask(Subtask subtask) {
+    public Subtask createSubtask(Subtask subtask) {
         final int taskId = nextId++;
         subtask.setId(taskId);
 
@@ -129,7 +129,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteSubtask(int id) {
-        Task subtask = subtasksMap.get(id);
+        Subtask subtask = subtasksMap.get(id);
 
         if (subtask != null) {
             subtasksMap.remove(id);
@@ -153,8 +153,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task findSubtaskById(int id) {
-        Task subtask = subtasksMap.get(id);
+    public Subtask findSubtaskById(int id) {
+        Subtask subtask = subtasksMap.get(id);
 
         if (subtask != null) {
             historyManager.add(subtask);
@@ -164,8 +164,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task findEpicById(int id) {
-        Task epic = epicsMap.get(id);
+    public Epic findEpicById(int id) {
+        Epic epic = epicsMap.get(id);
 
         if (epic != null) {
             historyManager.add(epic);
@@ -186,12 +186,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Task> getAllEpics() {
+    public List<Epic> getAllEpics() {
         return new ArrayList<>(epicsMap.values());
     }
 
     @Override
-    public List<Task> getAllSubtasks() {
+    public List<Subtask> getAllSubtasks() {
         return new ArrayList<>(subtasksMap.values());
     }
 
@@ -201,8 +201,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Task> getSubtasksForEpic(int epicId) {
-        List<Task> subtasks = new ArrayList<>();
+    public List<Subtask> getSubtasksForEpic(int epicId) {
+        List<Subtask> subtasks = new ArrayList<>();
 
         Epic epic = (Epic) findEpicById(epicId);
 
@@ -210,7 +210,7 @@ public class InMemoryTaskManager implements TaskManager {
             List<Integer> subtaskIds = epic.getSubtaskIds();
 
             for (int subtaskId : subtaskIds) {
-                Task subtask = subtasksMap.get(subtaskId);
+                Subtask subtask = subtasksMap.get(subtaskId);
                 if (subtask != null) {
                     subtasks.add(subtask);
                 } else {

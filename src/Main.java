@@ -135,8 +135,8 @@ public class Main {
                     System.out.println("Задача с указанным ID не найдена.");
                 }
             } else if (command == 4) {
-                List<Task> allEpics = taskManager.getAllEpics();
-                List<Task> allSubtasks = taskManager.getAllSubtasks();
+                List<Epic> allEpics = taskManager.getAllEpics();
+                List<Subtask> allSubtasks = taskManager.getAllSubtasks();
                 List<Task> allNormalTasks = taskManager.getAllNormalTasks();
 
                 System.out.println("Список всех Epic задач:");
@@ -158,7 +158,7 @@ public class Main {
                 int epicId = scanner.nextInt();
                 scanner.nextLine();
 
-                List<Task> subtasksForEpic = taskManager.getSubtasksForEpic(epicId);
+                List<Subtask> subtasksForEpic = taskManager.getSubtasksForEpic(epicId);
 
                 if (subtasksForEpic.isEmpty()) {
                     System.out.println("Подзадачи для выбранного эпика отсутствуют.");
