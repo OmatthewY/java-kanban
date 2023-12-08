@@ -30,17 +30,42 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             String fileContent = Files.readString(Path.of(file.getPath()));
             String[] lines = fileContent.split("\n");
 
+            int maxId = 0;
+
+            List<Integer> historyIds = new ArrayList<>();
+
             for (String line : lines) {
                 if (!line.isEmpty()) {
                     Task task = fromString(line);
 
-                    if (task.getType() == TaskType.EPIC) {
-                        manager.createEpic((Epic) task);
-                    } else if (task.getType() == TaskType.SUBTASK) {
-                        manager.createSubtask((Subtask) task);
-                    } else {
-                        manager.createNormalTask(task);
+                    if (task.getId() > maxId) {
+                        maxId = task.getId();
                     }
+
+                    if (task.getType() == TaskType.EPIC) {
+                        manager.epicsMap.put(task.getId(), (Epic) task);
+                    } else if (task.getType() == TaskType.SUBTASK) {
+                        manager.subtasksMap.put(task.getId(), (Subtask) task);
+                    } else {
+                        manager.normalTasksMap.put(task.getId(), task);
+                    }
+                } else {
+                    List<Integer> taskIds = historyFromString(line);
+
+                    historyIds.addAll(taskIds);
+                }
+            }
+            manager.nextId = maxId + 1;
+
+            for (int taskId : historyIds) {
+                Task task = manager.findNormalTaskById(taskId);
+                Epic epic = manager.findEpicById(taskId);
+                Subtask subtask = manager.findSubtaskById(taskId);
+
+                if (task != null || epic != null || subtask != null) {
+                    manager.historyManager.add(task);
+                    manager.historyManager.add(epic);
+                    manager.historyManager.add(subtask);
                 }
             }
         } catch (IOException e) {
@@ -105,11 +130,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public void deleteNormalTask(int id) {
         super.deleteNormalTask(id);
         save();
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        return super.getHistory();
     }
     
     private void save() {
