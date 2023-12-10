@@ -43,11 +43,26 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     }
 
                     if (task.getType() == TaskType.EPIC) {
-                        manager.epicsMap.put(task.getId(), (Epic) task);
+                        Epic epic = manager.epicsMap.get(task.getId());
+
+                        if (epic != null) {
+                            manager.epicsMap.put(task.getId(), epic);
+                            manager.historyManager.add(epic);
+                        }
                     } else if (task.getType() == TaskType.SUBTASK) {
-                        manager.subtasksMap.put(task.getId(), (Subtask) task);
+                        Subtask subtask = manager.subtasksMap.get(task.getId());
+
+                        if (subtask != null) {
+                            manager.subtasksMap.put(task.getId(), subtask);
+                            manager.historyManager.add(subtask);
+                        }
                     } else {
-                        manager.normalTasksMap.put(task.getId(), task);
+                        Task normalTask = manager.normalTasksMap.get(task.getId());
+
+                        if (normalTask != null) {
+                            manager.normalTasksMap.put(task.getId(), normalTask);
+                            manager.historyManager.add(normalTask);
+                        }
                     }
                 } else {
                     List<Integer> taskIds = historyFromString(line);
@@ -58,13 +73,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             manager.nextId = maxId + 1;
 
             for (int taskId : historyIds) {
-                Task task = manager.findNormalTaskById(taskId);
-                Epic epic = manager.findEpicById(taskId);
-                Subtask subtask = manager.findSubtaskById(taskId);
+                Task task = manager.normalTasksMap.get(taskId);
+                Epic epic = manager.epicsMap.get(taskId);
+                Subtask subtask = manager.subtasksMap.get(taskId);
 
-                if (task != null || epic != null || subtask != null) {
+                if (task != null) {
                     manager.historyManager.add(task);
+                } else if (epic != null) {
                     manager.historyManager.add(epic);
+                } else if (subtask != null) {
                     manager.historyManager.add(subtask);
                 }
             }
