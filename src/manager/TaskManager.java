@@ -1,11 +1,11 @@
 package manager;
 
-import tasks.enums.TaskStatus;
 import tasks.models.Epic;
 import tasks.models.Subtask;
 import tasks.models.Task;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public interface TaskManager {
     Task createEpic(Epic epic);
@@ -16,13 +16,19 @@ public interface TaskManager {
 
     void updateEpic(Epic epic);
 
-    void updateSubtask(Subtask subtask);
+    Subtask updateSubtask(Subtask subtask);
 
-    void updateNormalTask(Task task);
+    Task updateNormalTask(Task task);
 
     void deleteEpic(int id);
 
     void deleteSubtask(int id);
+
+    void deleteAllEpics();
+
+    void deleteAllSubtasks();
+
+    void deleteAllNormalTasks();
 
     void deleteNormalTask(int id);
 
@@ -40,5 +46,15 @@ public interface TaskManager {
 
     List<Subtask> getSubtasksForEpic(int epicId);
 
+    Epic getEpic(int id);
+
+    Subtask getSubtask(int id);
+
+    Task getNormalTask(int id);
+
     List<Task> getHistory();
+
+    ArrayList<Task> getPrioritizedTasks();
+
+    void getEpicTime(Epic epic);
 }

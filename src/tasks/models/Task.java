@@ -3,12 +3,16 @@ package tasks.models;
 import tasks.enums.TaskStatus;
 import tasks.enums.TaskType;
 
+import java.time.LocalDateTime;
+
 public class Task {
     private int id;
     private String name;
     private String description;
     private TaskType type;
     private TaskStatus status;
+    protected int duration;
+    protected LocalDateTime startTime;
 
     public Task(int id, String name, String description, TaskType type, TaskStatus status) {
         this.id = id;
@@ -19,7 +23,47 @@ public class Task {
     }
 
     public Task(String name, String description, TaskType type, TaskStatus status) {
-        this(0, name, description, type, status);
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.status = status;
+    }
+
+    public Task(int id, String name, String description, TaskType type, TaskStatus status, int duration,
+                LocalDateTime startTime) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
+    public Task(String name, String description, TaskType type, TaskStatus status, int duration,
+                LocalDateTime startTime) {
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime != null) {
+            return startTime.plusMinutes(duration);
+        } else {
+            return null;
+        }
     }
 
     @Override
