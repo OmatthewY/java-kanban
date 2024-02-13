@@ -17,13 +17,13 @@ class EpicTest  {
     Epic epic = new Epic(1, "Epic 1", "Description of Epic 1", TaskStatus.NEW);
 
     @BeforeEach
-    public void beforeEach() {
+    public void beforeEach() throws Exception {
         taskManager.createEpic(epic);
         taskManager.deleteAllSubtasks();
     }
 
     @Test
-    public void shouldReturnCorrectStartTime() {
+    public void shouldReturnCorrectStartTime() throws Exception {
         Subtask subtaskTest1 = new Subtask(2,"Subtask 1", "Description of Subtask 1", 1,
                 10, LocalDateTime.of(2023, 1, 1, 1, 1));
         taskManager.createSubtask(subtaskTest1);
@@ -39,7 +39,7 @@ class EpicTest  {
     }
 
     @Test
-    public void shouldReturnCorrectEndTime() {
+    public void shouldReturnCorrectEndTime() throws Exception {
         Subtask subtaskTest1 = new Subtask(2,"Subtask 1", "Description of Subtask 1", 1,
                 10, LocalDateTime.of(2023, 1, 1, 1, 1));
         taskManager.createSubtask(subtaskTest1);
@@ -55,7 +55,7 @@ class EpicTest  {
     }
 
     @Test
-    public void shouldReturnNullStartTime() {
+    public void shouldReturnNullStartTime() throws Exception {
         Subtask subtaskTest1 = new Subtask(2,"Subtask 1", "Description of Subtask 1", 1);
         taskManager.createSubtask(subtaskTest1);
 
@@ -69,7 +69,7 @@ class EpicTest  {
     }
 
     @Test
-    public void shouldReturnNullEndTime() {
+    public void shouldReturnNullEndTime() throws Exception {
         Subtask subtaskTest1 = new Subtask(2,"Subtask 1", "Description of Subtask 1", 1);
         taskManager.createSubtask(subtaskTest1);
 
@@ -83,7 +83,7 @@ class EpicTest  {
     }
 
     @Test
-    public void shouldReturnCorrectDuration() {
+    public void shouldReturnCorrectDuration() throws Exception {
         Subtask subtaskTest1 = new Subtask(2,"Subtask 1", "Description of Subtask 1", 1,
                 10, LocalDateTime.of(2023, 1, 1, 1, 1));
         taskManager.createSubtask(subtaskTest1);
@@ -102,7 +102,7 @@ class EpicTest  {
     }
 
     @Test
-    public void shouldReturnNullDuration() {
+    public void shouldReturnNullDuration() throws Exception {
         Subtask subtaskTest1 = new Subtask(2,"Subtask 1", "Description of Subtask 1", 1);
         taskManager.createSubtask(subtaskTest1);
 
@@ -126,7 +126,7 @@ class EpicTest  {
     }
 
     @Test
-    public void shouldReturnEpicNewWhenAllSubtasksNew() {
+    public void shouldReturnEpicNewWhenAllSubtasksNew() throws Exception {
         Subtask subtaskTest1 = new Subtask(2,"Subtask 1", "Description of Subtask 1", 1);
         taskManager.createSubtask(subtaskTest1);
 
@@ -137,7 +137,7 @@ class EpicTest  {
     }
 
     @Test
-    public void shouldReturnEpicDoneWhenAllSubtasksDone() {
+    public void shouldReturnEpicDoneWhenAllSubtasksDone() throws Exception {
         Subtask subtaskTest1 = new Subtask(2,"Subtask 1", "Description of Subtask 1", 1,
                 TaskStatus.DONE);
         taskManager.createSubtask(subtaskTest1);
@@ -150,7 +150,7 @@ class EpicTest  {
     }
 
     @Test
-    public void shouldReturnEpicInProgressWhenSubtasksNewAndDone() {
+    public void shouldReturnEpicInProgressWhenSubtasksNewAndDone() throws Exception {
         Subtask subtaskTest1 = new Subtask(2,"Subtask 1", "Description of Subtask 1", 1,
                 TaskStatus.DONE);
         taskManager.createSubtask(subtaskTest1);
@@ -162,7 +162,7 @@ class EpicTest  {
     }
 
     @Test
-    public void shouldReturnEpicInProgressWhenAllSubtasksInProgress() {
+    public void shouldReturnEpicInProgressWhenAllSubtasksInProgress() throws Exception {
         Subtask subtaskTest1 = new Subtask(2,"Subtask 1", "Description of Subtask 1", 1,
                 TaskStatus.IN_PROGRESS);
         taskManager.createSubtask(subtaskTest1);

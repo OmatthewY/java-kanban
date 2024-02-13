@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import java.time.LocalDateTime;
+import java.lang.Exception;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int nextId = 1;
@@ -22,19 +23,19 @@ public class InMemoryTaskManager implements TaskManager {
     protected static TreeSet<Task> tasksTreeSet = new TreeSet<>(new tasksComparator());
 
     @Override
-    public Epic createEpic(Epic epic) {
+    public Epic createEpic(Epic epic) throws Exception {
         final int taskId = nextId++;
         epic.setId(taskId);
 
         epicsMap.put(taskId, epic);
         updateEpicStatus(epic.getId());
-        tasksTreeSet.add(epic);
+        addTask(epic);
 
         return epic;
     }
 
     @Override
-    public Subtask createSubtask(Subtask subtask) {
+    public Subtask createSubtask(Subtask subtask) throws Exception {
         final int taskId = nextId++;
         subtask.setId(taskId);
 
@@ -44,7 +45,7 @@ public class InMemoryTaskManager implements TaskManager {
             subtasksMap.put(taskId, subtask);
             epic.addSubtaskId(taskId);
             updateEpicStatus(subtask.getEpicId());
-            tasksTreeSet.add(subtask);
+            addTask(subtask);
 
             return subtask;
         } else {
@@ -54,12 +55,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task createNormalTask(Task task) {
+    public Task createNormalTask(Task task) throws Exception {
         final int taskId = nextId++;
         task.setId(taskId);
 
         normalTasksMap.put(taskId, task);
-        tasksTreeSet.add(task);
+        addTask(task);
 
         return task;
     }
@@ -78,11 +79,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask updateSubtask(Subtask subtask) {
+    public Subtask updateSubtask(Subtask subtask) throws Exception {
         final int id = subtask.getId();
         final int epicId = subtask.getEpicId();
 
         Subtask savedSubtask = (Subtask) findSubtaskById(id);
+
+        tasksTreeSet.remove(subtask);
 
         if (savedSubtask != null) {
             savedSubtask.setName(subtask.getName());
@@ -92,7 +95,7 @@ public class InMemoryTaskManager implements TaskManager {
             Epic epic = (Epic) findEpicById(epicId);
 
             if (epic != null) {
-                tasksTreeSet.add(subtask);
+                addTask(subtask);
                 updateEpicStatus(epicId);
             } else {
                 System.out.println("Эпик с указанным ID не найден.");
@@ -104,15 +107,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task updateNormalTask(Task task) {
+    public Task updateNormalTask(Task task) throws Exception {
         final int id = task.getId();
         final Task savedTask = normalTasksMap.get(id);
+
+        tasksTreeSet.remove(task);
 
         if (savedTask != null) {
             savedTask.setName(task.getName());
             savedTask.setDescription(task.getDescription());
             savedTask.setStatus(task.getStatus());
-            tasksTreeSet.add(task);
+            addTask(task);
         } else {
             System.out.println("Задача с указанным ID не найдена.");
         }
@@ -124,7 +129,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = (Epic) findEpicById(id);
 
         if (epic != null) {
-            tasksTreeSet.remove(epicsMap.get(id));
+            tasksTreeSet.remove(epic);
             epicsMap.remove(id);
 
             List<Integer> subtaskIds = epic.getSubtaskIds();
@@ -144,7 +149,7 @@ public class InMemoryTaskManager implements TaskManager {
         Subtask subtask = subtasksMap.get(id);
 
         if (subtask != null) {
-            tasksTreeSet.remove(subtasksMap.get(id));
+            tasksTreeSet.remove(subtask);
             updateEpicStatus(((Subtask) subtask).getEpicId());
             subtasksMap.remove(id);
             historyManager.remove(id);
@@ -158,7 +163,7 @@ public class InMemoryTaskManager implements TaskManager {
         Task normalTask = normalTasksMap.get(id);
 
         if (normalTask != null) {
-            tasksTreeSet.remove(normalTasksMap.get(id));
+            tasksTreeSet.remove(normalTask);
             normalTasksMap.remove(id);
             historyManager.remove(id);
         } else {
@@ -170,6 +175,8 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllEpics() {
         epicsMap.clear();
         subtasksMap.clear();
+
+        historyManager.removeAllTasksOfType(Epic.class);
 
         tasksTreeSet.removeIf(task -> task instanceof Epic);
     }
@@ -185,12 +192,16 @@ public class InMemoryTaskManager implements TaskManager {
                 updateEpicStatus(epic.getId());
             }
         }
+        historyManager.removeAllTasksOfType(Subtask.class);
+
         tasksTreeSet.removeIf(task -> task instanceof Subtask);
     }
 
     @Override
     public void deleteAllNormalTasks() {
         normalTasksMap.clear();
+
+        historyManager.removeAllTasksOfType(Task.class);
 
         tasksTreeSet.removeIf(task -> task instanceof Task);
     }
@@ -349,5 +360,23 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStartTime(subStartTime);
             epic.setEndTime(subEndTime);
         }
+    }
+
+    private void addTask(Task task) throws Exception {
+        LocalDateTime newTaskStartTime = task.getStartTime();
+        LocalDateTime newTaskEndTime = task.getEndTime();
+
+        for (Task existingTask : tasksTreeSet) {
+            LocalDateTime existingTaskStartTime = existingTask.getStartTime();
+            LocalDateTime existingTaskEndTime = existingTask.getEndTime();
+
+            if ((newTaskStartTime.isAfter(existingTaskStartTime) && newTaskStartTime.isBefore(existingTaskEndTime)) ||
+                    (newTaskEndTime.isAfter(existingTaskStartTime) && newTaskEndTime.isBefore(existingTaskEndTime)) ||
+                    (newTaskStartTime.isBefore(existingTaskStartTime) && newTaskEndTime.isAfter(existingTaskEndTime))) {
+                throw new Exception("Пересечение дат с существующей задачей.");
+            }
+        }
+
+        tasksTreeSet.add(task);
     }
 }

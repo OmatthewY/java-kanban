@@ -9,5 +9,6 @@ public interface HistoryManager {
 
     void remove(int id);
 
+    void removeAllTasksOfType(Class<? extends Task> type);
     List<Task> getHistory();
 }

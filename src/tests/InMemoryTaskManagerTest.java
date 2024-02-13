@@ -45,7 +45,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void createNormalTask() {
+    void createNormalTask() throws Exception {
         // Создание задачи
         final Task task = new Task("Task 1", "Description of Task 1",
                 TaskType.NORMAL, TaskStatus.NEW);
@@ -76,7 +76,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void createSubtask() {
+    void createSubtask() throws Exception {
         taskManager.createEpic(epic);
 
         assertEquals(1, taskManager.getAllEpics().size(), "Эпик не создался");
@@ -104,7 +104,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void createEpic() {
+    void createEpic() throws Exception {
         final Epic createdEpic = taskManager.createEpic(epic);
         final int epicId = createdEpic.getId();
         Epic savedEpic = taskManager.getEpic(epicId);
@@ -129,7 +129,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void updateNormalTask() {
+    void updateNormalTask() throws Exception {
         final Task createdNormalTask = taskManager.createNormalTask(normalTask);
         final int id = createdNormalTask.getId();
 
@@ -157,7 +157,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void updateSubtask() {
+    void updateSubtask() throws Exception {
         taskManager.createEpic(epic);
 
         assertEquals(1, taskManager.getAllEpics().size(), "Эпик отсутствует");
@@ -191,7 +191,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void updateEpicWithNewAndDoneSubtasks() {
+    void updateEpicWithNewAndDoneSubtasks() throws Exception {
         final Epic createdEpic = taskManager.createEpic(epicWithNewAndDoneSubtask);
         final int id = createdEpic.getId();
 
@@ -218,7 +218,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void updateEpicWithDoneSubtasks() {
+    void updateEpicWithDoneSubtasks() throws Exception {
         final Epic createdEpic = taskManager.createEpic(epicWithDoneSubtasks);
         final int id = createdEpic.getId();
 
@@ -243,7 +243,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void updateEpicWithNewSubtasks() {
+    void updateEpicWithNewSubtasks() throws Exception {
         final Epic createdEpic = taskManager.createEpic(epicWithNewSubtasks);
         final int id = createdEpic.getId();
 
@@ -267,7 +267,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void updateEpicWithoutSubtasks() {
+    void updateEpicWithoutSubtasks() throws Exception {
         taskManager.createEpic(epic);
         taskManager.updateEpic(epic);
 
@@ -296,7 +296,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void deleteAllNormalTasks() {
+    void deleteAllNormalTasks() throws Exception {
         taskManager.createNormalTask(normalTask);
         taskManager.deleteAllNormalTasks();
 
@@ -304,7 +304,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void deleteAllSubtasks() {
+    void deleteAllSubtasks() throws Exception {
         final Epic createdEpic = taskManager.createEpic(epic);
         final int id = createdEpic.getId();
 
@@ -319,7 +319,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void deleteAllEpics() {
+    void deleteAllEpics() throws Exception {
         taskManager.createEpic(epic);
         taskManager.deleteAllEpics();
 
@@ -327,7 +327,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void deleteNormalTaskById() {
+    void deleteNormalTaskById() throws Exception {
         Task normalTask1 = new Task("Normal Task 1", "Desceription of Normal Task 1",
                 TaskType.NORMAL, TaskStatus.NEW);
 
@@ -346,7 +346,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void deleteSubtaskById() {
+    void deleteSubtaskById() throws Exception {
         final Epic createdEpic = taskManager.createEpic(epic);
         final int id = createdEpic.getId();
 
@@ -367,7 +367,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void deleteEpicById() {
+    void deleteEpicById() throws Exception {
         final Epic createdEpic1 = taskManager.createEpic(epic);
         final int id1 = createdEpic1.getId();
 

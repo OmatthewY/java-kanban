@@ -26,7 +26,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    void save() {
+    void save() throws Exception {
         FileBackedTasksManager fileBacked =
                 new FileBackedTasksManager(new File("./resources/tasksForTests2.csv"));
 
@@ -83,7 +83,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    void saveEpicWithoutAndWithoutHistory() {
+    void saveEpicWithoutAndWithoutHistory() throws Exception {
         Epic epic1 = new Epic(1,"Epic #1", "Epic1 description", TaskStatus.NEW, 30,
                 LocalDateTime.of(2024, 1, 1, 1, 1, 1));
 

@@ -95,21 +95,21 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Epic createEpic(Epic epic) {
+    public Epic createEpic(Epic epic) throws Exception {
         Epic createdEpic = super.createEpic(epic);
         //save();
         return createdEpic;
     }
 
     @Override
-    public Subtask createSubtask(Subtask subtask) {
+    public Subtask createSubtask(Subtask subtask) throws Exception {
         Subtask createdSubtask = super.createSubtask(subtask);
         //save();
         return createdSubtask;
     }
 
     @Override
-    public Task createNormalTask(Task task) {
+    public Task createNormalTask(Task task) throws Exception {
         Task createdTask = super.createNormalTask(task);
         //save();
         return createdTask;
@@ -122,14 +122,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Subtask updateSubtask(Subtask subtask) {
+    public Subtask updateSubtask(Subtask subtask) throws Exception {
         super.updateSubtask(subtask);
         //save();
         return subtask;
     }
 
     @Override
-    public Task updateNormalTask(Task task) {
+    public Task updateNormalTask(Task task) throws Exception {
         super.updateNormalTask(task);
         //save();
         return task;
@@ -244,7 +244,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return history;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         Epic epic1 = new Epic(1, "Epic 1", "Description of Epic 1", TaskStatus.NEW);
 

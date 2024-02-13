@@ -40,7 +40,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void getCreatedEpicById() {
+    void getCreatedEpicById() throws Exception {
         final Epic createdEpic = (Epic) taskManager.createEpic(epic);
         final int epicId = createdEpic.getId();
         Epic savedEpic = taskManager.getEpic(epicId);
@@ -50,7 +50,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void getCreatedSubtaskById() {
+    void getCreatedSubtaskById() throws Exception {
         final Epic createdEpic = (Epic) taskManager.createEpic(epic);
         final int epicId = createdEpic.getId();
 
@@ -65,7 +65,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void getCreatedNormalTasksById() {
+    void getCreatedNormalTasksById() throws Exception {
         taskManager.createNormalTask(normalTask);
         Task savedNormalTask = taskManager.getNormalTask(normalTask.getId());
         
@@ -74,7 +74,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void getAllCreatedEpics() {
+    void getAllCreatedEpics() throws Exception {
         taskManager.createEpic(epic);
 
         assertNotNull(taskManager.getAllEpics(), "Эпики не возвращаются");
@@ -84,7 +84,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void getAllCreatedSubtasks() {
+    void getAllCreatedSubtasks() throws Exception {
         final Epic createdEpic = (Epic) taskManager.createEpic(epic);
         final int epicId = createdEpic.getId();
 
@@ -99,7 +99,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void getAllCreatedNormalTasks() {
+    void getAllCreatedNormalTasks() throws Exception {
         taskManager.createNormalTask(normalTask);
 
         assertNotNull(taskManager.getAllNormalTasks(), "Задачи не возвращаются");
@@ -109,7 +109,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void getEpicSubtasks() {
+    void getEpicSubtasks() throws Exception {
         final Epic createdEpic = (Epic) taskManager.createEpic(epic);
         final int epicId = createdEpic.getId();
 
@@ -126,13 +126,13 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void getEpicWithoutSubtasks() {
+    void getEpicWithoutSubtasks() throws Exception {
         taskManager.createEpic(epic);
         assertEquals(0, epic.getSubtaskIds().size(), "Список не пустой");
     }
 
     @Test
-    void getPrioritizedTasks() {
+    void getPrioritizedTasks() throws Exception {
         Task normalTask1 = new Task("Task 1", "Description of Task 1", TaskType.NORMAL,
                 TaskStatus.NEW, 20,LocalDateTime.of(2022,1,1,1,1,1));
         taskManager.createNormalTask(normalTask1);
