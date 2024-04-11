@@ -68,8 +68,12 @@ public class Task {
 
     @Override
     public String toString() {
-        return "ID: " + id + ", Name: " + name + ", Description: " + description + ", Type: " + type
-                + ", Status: " + status;
+        return "Task{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 
     public int getId() {
@@ -106,5 +110,9 @@ public class Task {
 
     public TaskStatus getStatus() {
         return status;
+    }
+
+    public String getEpicType() {
+        return type.toString();
     }
 }

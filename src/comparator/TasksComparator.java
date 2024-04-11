@@ -4,7 +4,7 @@ import tasks.models.Task;
 
 import java.util.Comparator;
 
-public class tasksComparator implements Comparator<Task> {
+public class TasksComparator implements Comparator<Task> {
     @Override
     public int compare(Task task1, Task task2) {
         if (task1.getStartTime() == null) {

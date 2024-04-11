@@ -8,17 +8,17 @@ import java.util.List;
 import java.util.ArrayList;
 
 public interface TaskManager {
-    Task createEpic(Epic epic) throws Exception;
+    Task createEpic(Epic epic);
 
-    Task createSubtask(Subtask subtask) throws Exception;
+    Task createSubtask(Subtask subtask);
 
-    Task createNormalTask(Task task) throws Exception;
+    Task createNormalTask(Task task);
 
-    void updateEpic(Epic epic);
+    Epic updateEpic(Epic epic);
 
-    Subtask updateSubtask(Subtask subtask) throws Exception;
+    Subtask updateSubtask(Subtask subtask);
 
-    Task updateNormalTask(Task task) throws Exception;
+    Task updateNormalTask(Task task);
 
     void deleteEpic(int id);
 

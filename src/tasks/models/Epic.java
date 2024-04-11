@@ -1,6 +1,5 @@
 package tasks.models;
 
-import manager.InMemoryTaskManager;
 import tasks.enums.TaskStatus;
 import tasks.enums.TaskType;
 
@@ -11,8 +10,6 @@ import java.time.LocalDateTime;
 public class Epic extends Task {
     private List<Integer> subtaskIds;
     private LocalDateTime endTime;
-
-    InMemoryTaskManager taskManager = new InMemoryTaskManager();
 
     public Epic(int id, String name, String description, TaskStatus status) {
         super(id, name, description, TaskType.EPIC, status);

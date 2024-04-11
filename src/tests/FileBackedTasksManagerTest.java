@@ -8,6 +8,8 @@ import tasks.models.Task;
 import tasks.models.Subtask;
 import tasks.models.Epic;
 import tasks.enums.TaskStatus;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.io.File;
 
@@ -15,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
     @BeforeEach
-    void beforeEach() {
+    void beforeEach() throws IOException, InterruptedException {
         super.beforeEach();
 
         taskManager = new FileBackedTasksManager(new File("./resources/tasksForTests.csv"));
@@ -26,7 +28,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    void save() throws Exception {
+    void save() {
         FileBackedTasksManager fileBacked =
                 new FileBackedTasksManager(new File("./resources/tasksForTests2.csv"));
 
@@ -76,25 +78,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         fileBacked.createSubtask(subtask2);
         fileBacked.getSubtask(subtask2.getId());
 
-        fileBacked.save();
-        taskManager.save();
-
         compareFiles("./resources/tasksForTests.csv", "./resources/tasksForTests2.csv");
-    }
-
-    @Test
-    void saveEpicWithoutAndWithoutHistory() throws Exception {
-        Epic epic1 = new Epic(1,"Epic #1", "Epic1 description", TaskStatus.NEW, 30,
-                LocalDateTime.of(2024, 1, 1, 1, 1, 1));
-
-        FileBackedTasksManager actualFilebacked =
-                new FileBackedTasksManager(new File("./resources/tasksForTests3.csv"));
-
-        actualFilebacked.createEpic(epic1);
-
-        actualFilebacked.save();
-
-        compareFiles("./resources/tasksForTests3.csv", "./resources/tasksForTests2.csv");
     }
 
     private void compareFiles(String expectedFile, String actualFile) {

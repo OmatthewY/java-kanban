@@ -13,12 +13,10 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -95,46 +93,69 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Epic createEpic(Epic epic) throws Exception {
+    public Epic createEpic(Epic epic) {
         Epic createdEpic = super.createEpic(epic);
-        //save();
+        save();
         return createdEpic;
     }
 
     @Override
-    public Subtask createSubtask(Subtask subtask) throws Exception {
+    public Subtask createSubtask(Subtask subtask) {
         Subtask createdSubtask = super.createSubtask(subtask);
-        //save();
+        save();
         return createdSubtask;
     }
 
     @Override
-    public Task createNormalTask(Task task) throws Exception {
+    public Task createNormalTask(Task task) {
         Task createdTask = super.createNormalTask(task);
-        //save();
+        save();
         return createdTask;
     }
 
     @Override
-    public void updateEpic(Epic epic) {
-        super.updateEpic(epic);
-        //save();
+    public Task getNormalTask(int id) {
+        super.getNormalTask(id);
+        save();
+        return normalTasksMap.get(id);
     }
 
     @Override
-    public Subtask updateSubtask(Subtask subtask) throws Exception {
+    public Subtask getSubtask(int id) {
+        super.getSubtask(id);
+        save();
+        return subtasksMap.get(id);
+    }
+
+    @Override
+    public Epic getEpic(int id) {
+        super.getEpic(id);
+        save();
+        return epicsMap.get(id);
+    }
+
+    /*
+    @Override
+    public Epic updateEpic(Epic epic) {
+        super.updateEpic(epic);
+        //save();
+        return epic;
+    }
+
+    @Override
+    public Subtask updateSubtask(Subtask subtask) {
         super.updateSubtask(subtask);
         //save();
         return subtask;
     }
 
     @Override
-    public Task updateNormalTask(Task task) throws Exception {
+    public Task updateNormalTask(Task task) {
         super.updateNormalTask(task);
         //save();
         return task;
     }
-
+     */
     @Override
     public void deleteEpic(int id) {
         super.deleteEpic(id);
@@ -153,7 +174,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         //save();
     }
     
-    public void save() {
+    protected void save() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(saveFile))) {
 
             for (Epic epic : getAllEpics()) {
@@ -244,7 +265,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return history;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         Epic epic1 = new Epic(1, "Epic 1", "Description of Epic 1", TaskStatus.NEW);
 
